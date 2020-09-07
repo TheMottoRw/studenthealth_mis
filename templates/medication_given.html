@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %} Student health MIS {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block menu %}
+    {% include 'menu_nurse.html' %}
+    {% endblock %}
+    {% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-9">
+                <h3>Prescribed medication</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <th>Consultation ID</th>
+                        <th>Names</th>
+                        <th>Reg no</th>
+                        <th>Symptoms</th>
+                        <th>Prescription</th>
+                        <th>Reg. Date</th>
+                        <th>Manage</th>
+                    </thead>
+                    <tbody id="registeredConsultation">
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <form action="nurse" method="POST">
+                    <h3>Prescribe medication</h3>
+                    <span id="regMedicationResponse"></span>
+                    <label>Consultation ID</label>
+                    <input type="text" id="consultationId" readonly="readonly"><br>
+                    <label>Name</label>
+                    <input type='text' name="names" id="names" readonly='readonly' class='form-control'><br>
+                    
+                    <label>Medication</label>
+                    <select id="medication">
+
+                    </select><br>
+                    <label>Quantity</label>
+                    <input type='text' name="quantity" class='form-control'><br>
+
+                    <label>Condition<code>(consumption details)</code></label>
+                    <textarea rows=3 name="condition" style="resize: none;" class='form-control'></textarea><br>
+                    <input type='submit' name="register" id="btnRegMedicationGiven" value='Register' class='btn btn-success'>
+                    <input type='reset' name="reset" id="btnResetMedicationGivenForm" value='Reset' class='btn btn-default pull-right'><br>
+                </form>
+                <hr>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+    loadUsers('setContent');
+</script>
+
+</html>

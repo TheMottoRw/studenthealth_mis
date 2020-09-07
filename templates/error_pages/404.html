@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %}  {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block content %}
+    <div class='container'>
+        <div class="jumbotron">
+            <center>
+            <h2>Oops 404 Error</h2>
+            <h4>Page not found <a href="{{ request.referrer }}">Go Back</a></h4>
+        </center>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+</script>
+
+</html>

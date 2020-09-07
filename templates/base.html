@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>{% block title%}{% endblock %}</title>
+        <link rel='stylesheet' type='text/css' href={{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }} />
+        <link rel='stylesheet' type='text/css' href={{ url_for('static',filename='bootstrap/bootstrap-datepicker/css/datepicker.css') }} />
+    </head>
+    <body>
+        {% block menu %} {% endblock %}
+    <h3>{% block header%}{% endblock %}</h3>
+    {% block content %}{% endblock %}
+</body>
+<script src={{ url_for('static',filename='bootstrap/js/jquery.js') }}></script>
+<script src={{ url_for('static',filename='bootstrap/js/bootstrap.js') }}></script>
+<script src={{ url_for('static',filename='bootstrap/bootstrap-datepicker/js/bootstrap-datepicker.js') }}></script>
+<script src={{ url_for('static',filename='jqdepend.js') }}></script>
+<script src={{ url_for('static',filename='main.js') }}></script>
+</html>

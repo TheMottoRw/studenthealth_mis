@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %} Student health MIS {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block menu %}
+    {% include 'menu_admin.html' %}
+    {% endblock %}
+    {% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-9">
+                <h3>Registered Nurses</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <th>#Count</th>
+                        <th>Names</th>
+                        <th>Phone</th>
+                        <th>Reg. Date</th>
+                        <th>Manage</th>
+                    </thead>
+                    <tbody id="registeredNurses">
+                        {% for nurse in nurses %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ nurse.names }}</td>
+                            <td>{{ nurse.phone }}</td>
+                            <td>{{ nurse.regdate }}</td>
+                            <td><button onclick="setEditNurseFormData(this)" data-id="{{ nurse.id }}" data-name="{{ nurse.names }}" data-phone="{{ nurse.phone }}" class="btn btn-warning">Edit</button>&nbsp;&nbsp;
+                                <a href="/nurse/delete/{{ nurse.id }}" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                </table>
+            </div>
+            <div class="col-md-3">
+                <form id="formRegNurse"" action="/nurse" method="POST">
+                    <h3>Register Nurses</h3>
+                    <span id="regUserResponse"></span>
+                    <input type="hidden" id="nurseId">
+                    <label>Name</label>
+                    <input type='text' name="names" id="names" class='form-control'><br>
+                    <label>Phone</label>
+                    <input type='text' name="phone" id="phone" class='form-control'><br>
+                    <label>Password</label>
+                    <input type='password' name="password" id="password" class='form-control'><br>
+
+                    <label>Confirm password </label>
+                    <input type='password' name="password" id="confPassword" class='form-control'><br>
+                    <input type='submit' name="register" id="btnRegNurse" value='Register' class='btn btn-success'>
+                    <input type='reset' name="reset" id="btnResetNurseForm" value='Reset' class='btn btn-default pull-right'><br>
+                </form>
+                <hr>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+    loadUsers('setContent');
+</script>
+
+</html>

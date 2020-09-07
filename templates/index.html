@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %} Student health MIS {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6 jumbotron">
+                <form action="/login" method="POST">
+                    <h3> Student health MIS - Login to to continue </h3>
+                    <span id="regUserResponse"> {{ message }}</span><br>
+                    <input type="hidden" id="nurseId">
+                    <label>Phone</label>
+                    <input type='text' name="phone" class='form-control'><br>
+                    <label>Password</label>
+                    <input type='password' name="password" class='form-control'><br>
+                    <input type='submit' name="register" id="btnLogin" value='Login' class='btn btn-success'>
+                    <a href="/v/search" class="btn btn-default pull-right" target="_blank">Proof & Insurance declaration</a><br>
+                </form>
+                <hr>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+    loadUsers('setContent');
+</script>
+
+</html>

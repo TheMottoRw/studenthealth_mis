@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %} Student health MIS {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block menu %}
+    <center>
+        <div>
+            {% include 'menu_openlink.html' %}
+        </div>
+    </center>
+    {% endblock %}
+
+    {% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Search your medical proof</h3>
+                <input type="text" class="form-control" placeholder="Type in your regno" name="searchPrescription"
+                    id="searchPrescription" style="height: 50px;font-size: 19px;text-align: center;border-color: grey;"><br>
+                <table class="table table-bordered">
+                    <thead>
+                        <th>#Count</th>
+                        <th>Names</th>
+                        <th>Reg no</th>
+                        <th>Reg. Date</th>
+                    </thead>
+                    <tbody id="searchPrescriptionBody">
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ student.names }}</td>
+                            <td>{{ student.regno }}</td>
+                            <td>{{ student.regdate }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+
+</script>
+
+</html>

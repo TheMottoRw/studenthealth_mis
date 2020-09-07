@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %} Student health MIS {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block menu %}
+    {% include 'menu_nurse.html' %}
+    {% endblock %}
+    {% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-9">
+                <h3>Registered Consultation</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <th>#Count</th>
+                        <th>Names</th>
+                        <th>Reg. No</th>
+                        <th>Height - Weight</th>
+                        <th>Symptoms</th>
+                        <th>Prescription</th>
+                        <th>Reg. Date</th>
+                        <th>Manage</th>
+                    </thead>
+                    <tbody id="registeredConsultations">
+                        {% for consultation in consultations %}
+                        <tr onclick="setRowSelection(this,'#registeredConsultations')">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ consultation.names }}</td>
+                            <td>{{ consultation.regno }}</td>
+                            <td>{{ consultation.height }} - {{ consultation.weight }}</td>
+                            <td>{{ consultation.symptoms }}</td>
+                            <td>{{ consultation.prescription }}</td>
+                            <td>{{ consultation.regdate }}</td>
+                            <td><button onclick="setPrescriptionFormData({{ consultation.id }}, '{{ consultation.names }}')" class="btn btn-primary">Prescribe</button>&nbsp;&nbsp;
+                                <button onclick="setEditConsultationFormData(this)" data-id="{{ consultation.id }}" data-studentid="{{ consultation.student }}" data-regno="{{ consultation.regno }}" data-name="{{ consultation.names }}" data-height="{{ consultation.height }}" data-weight="{{ consultation.weight }}" data-symptoms="{{ consultation.symptoms }}" class="btn btn-warning">Edit</button>&nbsp;&nbsp;
+                                <a href="/consultation/delete/{{ consultation.id }}" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <form id="formConsultation" action="/consultations" method="POST">
+                    <h3>Register Consultation</h3>
+                    <span id="regUserResponse"> {{ message }}</span>
+                    <label>RegNo</label>
+                    <input type="hidden" name=studentId id="studentId"> 
+                    <input type='text' name="regno" id="regno"  class='form-control'><br>
+                    <label>Names</label>
+                    <input type='text' name="names" id="names" readonly='readonly' class='form-control'><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                    <label>Height</label>
+                    <input type='text' name="height" id="height" class='form-control'><br>
+                        </div>
+                        <div class="col-md-6">
+                    <label>Weight</label>
+                    <input type='number' name="weight" id="weight" class='form-control'><br>
+                        </div>
+                    </div>
+                    <label>Symptoms</label>
+                    <textarea rows='5' name="symptoms" id="symptoms" class='form-control'></textarea><br>
+                    <input type='submit' name="register" id="btnRegConsultation" value='Register' class='btn btn-success'>
+                    <input type='reset' name="reset" id="btnResetConsultationForm" value='Reset' class='btn btn-default pull-right'><br>
+                </form>
+
+                <form id="formPrescription" action="nurse" method="POST" style="display: none;">
+                    <h3>Prescribe medication</h3>
+                    <span id="regPrescriptionResponse"></span>
+                    <label>Consultation ID</label>
+                    <input type="text" id="prescribeConsultationId" readonly="readonly"><br>
+                    <label>Name</label>
+                    <input type='text' name="prescribeName" id="prescribeName" readonly='readonly' class='form-control'><br>
+                    
+                    <label>Medication</label>
+                    <select id="selMedication" name="selMedication">
+
+                    </select><br>
+                    <label>Quantity</label>
+                    <input type='text' name="quantity" id="quantity" class='form-control'><br>
+                    <label>Condition<code>(consumption details)</code></label>
+                    <textarea rows=3 name="condition" id="condition" style="resize: none;" class='form-control'></textarea><br>
+                    <input type='button' name="register" id="btnRegMedicationGiven" value='Register' class='btn btn-success'>
+                    <input type='button' name="btnCloseMedicationGivenForm" id="btnCloseMedicationGivenForm" value='Back' class='btn btn-danger pull-right'><br>
+                </form>
+                <hr>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+    loadUsers('setContent');
+</script>
+
+</html>

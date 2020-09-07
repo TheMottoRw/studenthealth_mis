@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+  <title>
+    {% block title %} Student health MIS {{ data }} {% endblock %}
+  </title>
+</head>
+
+<body>
+  {% block menu %}
+  {% include 'menu_nurse.html' %}
+  {% endblock %}
+  {% block content %}
+  <div class='container'>
+    <div class="row">
+      <div class="col-md-9">
+        <h3>Registered medication</h3>
+        <table class="table table-bordered">
+          <thead>
+            <th>#Count</th>
+            <th>Names</th>
+            <th>Current Qty</th>
+            <th>Added Qty</th>
+            <th>Total Qty</th>
+            <th>Batch No</th>
+            <th>Expiry on</th>
+            <th>Reg. Date</th>
+            <th>Manage</th>
+          </thead>
+          <tbody id="registeredMedication">
+            {% for medication in medications %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ medication.name }}</td>
+              <td>{{ medication.current_qty }}</td>
+              <td>{{ medication.added_qty }}</td>
+              <td>{{ medication.total_qty }}</td>
+              <td>{{ medication.batch_number }}</td>
+              <td>{{ medication.expiry_date }}</td>
+              <td>{{ medication.regdate }}</td>
+              <td><a href="/medhistory/delete/{{ medication.id }}" class="btn btn-danger">Delete</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</body>
+<script>
+  loadUsers('setContent');
+</script>
+
+</html>

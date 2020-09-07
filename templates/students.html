@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %} Student health MIS {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block menu %}
+    {% include 'menu_admin.html' %}
+    {% endblock %}
+    {% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-9">
+                <h3>Registered Student</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <th>#Count</th>
+                        <th>Names</th>
+                        <th>Phone</th>
+                        <th>Ins. Type</th>
+                        <th>Ins. number</th>
+                        <th>Reg. Date</th>
+                        <th>Manage</th>
+                    </thead>
+                    <tbody id="registeredStudents">
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ student.names }}</td>
+                            <td>{{ student.phone }}</td>
+                            <td>{{ student.insurance_type }}</td>
+                            <td>{{ student.insurance_number }}</td>
+                            <td>{{ student.regdate }}</td>
+                            <td><!--a href="/student/{{ student.id }}" class="btn btn-warning">Edit</a-->&nbsp;&nbsp;
+                                <a href="/student/delete/{{ student.id }}" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <form action="/students" method="POST">
+                    <h3>Register Student</h3>
+                    <span id="regUserResponse"></span>
+                    <input type="hidden" id="studentId">
+                    <label>Name</label>
+
+                    <input type='text' name="names" class='form-control'><br>
+                    <label>Reg no</label>
+                    <input type='text' name="regno" class='form-control'><br>
+                    <label>Phone</label>
+                    <input type='text' name="phone" class='form-control'><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Insurance</label><br>
+                            <select name="insurance">
+                                <option>Private</option>
+                                <option>Mutuelle</option>
+                                <option>RSSB </option>
+                                <option>MMI</option>
+                                <option>Mediplan</option>
+                                <option>Britam</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Ins. number</label>
+                            <input type='text' name="insurance_number" class='form-control'><br>
+                        </div>
+                    </div>
+                    <input type='submit' name="register" id="btnRegStudents" value='Register' class='btn btn-success'>
+                    <input type='reset' name="reset" id="btnResetStudentForm" value='Reset'
+                        class='btn btn-default pull-right'><br>
+                </form>
+                <hr>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+    loadUsers('setContent');
+</script>
+
+</html>

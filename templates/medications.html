@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+  <title>
+    {% block title %} Student health MIS {{ data }} {% endblock %}
+  </title>
+</head>
+
+<body>
+  {% block menu %}
+  {% include 'menu_nurse.html' %}
+  {% endblock %}
+  {% block content %}
+  <div class='container'>
+    <div class="row">
+      <div class="col-md-9">
+        <h3>Registered medication</h3>
+        <table class="table table-bordered">
+          <thead>
+            <th>#Count</th>
+            <th>Names</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Reg. Date</th>
+            <th>Manage</th>
+          </thead>
+          <tbody id="registeredMedication">
+            {% for medication in medications %}
+            <tr onclick="setRowSelection(this,'#registeredMedication')">
+              <td>{{ loop.index }}</td>
+              <td>{{ medication.names }}</td>
+              <td>{{ medication.description }}</td>
+              <td>{{ medication.available_stock }} {{ medication.unit }}</td>
+              <td>{{ medication.regdate }}</td>
+              <td><button 
+                  onclick="setAddMedicationFormData({{ medication.id }},'{{ medication.names }}')"
+                  class="btn btn-primary">Add</button>&nbsp;&nbsp;
+                <button onclick="setEditMedicationFormData(this)" data-id="{{ medication.id }}" data-name="{{ medication.names }}" data-description="{{ medication.description }}" data-unit="{{ medication.unit }}" data-quantity="{{ medication.available_stock }}"  class="btn btn-warning">Edit</button>&nbsp;&nbsp;
+                <a href="/medication/delete/{{ medication.id }}" class="btn btn-danger">Delete</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-3">
+        <div id="divRegMedication">
+          <form id="formMedication" action="/medications" method="POST">
+            <h3>Register medication</h3>
+            <span id="regMedicationResponse"> {{ message }} </span><br>
+
+            <label>Name</label>
+            <input type='text' name="names" id="names" class='form-control'><br>
+            <label>Description</label>
+            <textarea name="description" id="description" class='form-control'></textarea><br>
+            <label>Unit</label>
+            <input type='text' name="unit" id="unit" class='form-control'><br>
+            <label>Quantity</label>
+            <input type='text' name="quantity" id="quantity" class='form-control'><br>
+            <input type='submit' name="register" id="btnRegMedication" value='Register' class='btn btn-success'>
+            <input type='reset' name="reset" id="btnResetMedicationForm" value='Reset'
+              class='btn btn-default pull-right'><br>
+          </form>
+        </div>
+        <hr>
+        <div id="divAddMedicationQuantity" style="display: none;">
+          <form id="formAddMedicationQuantity" >
+            <h3>Add Medication quantity</h3>
+            <span id="regAddMedicationResponse"></span>
+            <input type="hidden" id="addMedicationId">
+            <label>Name</label>
+            <input type='text' name="addMedicationNames" readonly='readonly' id="addMedicationNames"
+              class='form-control'><br>
+
+            <label>Quantity</label>
+            <input type='text' name="addMedicationQuantity" id="addMedicationQuantity" class='form-control'><br>
+
+            <label>Bath No</label>
+            <input type='text' name="medBathNo" id="medBathNo" class='form-control'><br>
+
+            <label>Expiry date</label>
+            <input type='text' name="medExpiryDate" id="medExpiryDate" class='form-control'><br>
+
+            <input type="button" name="btnAddMedication" id="btnAddMedication" class="btn btn-success" value="Register">
+            <input type="button" name="btnCloseAddMedicationQuantity" id="btnCloseAddMedicationQuantity" class="btn btn-danger pull-right" value="Back">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--modal-->
+
+  <div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add medication quantity</h4>
+          </div>
+          <div class="modal-body">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="btnAddMedication">Update</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+</body>
+<script>
+  loadUsers('setContent');
+</script>
+
+</html>
