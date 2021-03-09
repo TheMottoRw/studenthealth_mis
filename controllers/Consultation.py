@@ -1,6 +1,6 @@
 from config import app,db
 from flask import jsonify
-from controllers import MedicationGiven,Medications
+from controllers import MedicationGiven,Medications,Helper
 def save(student,height,weight,symptoms,medications,medication_qty,conditions):
     cur = db.connection.cursor()
     rs = cur.execute("INSERT INTO consultation SET student=%s,height=%s,weight=%s,symptoms=%s,medications=%s,medication_qty=%s,conditions=%s",(student,height,weight,symptoms,medications,medication_qty,conditions))
@@ -113,3 +113,36 @@ def delete(ids):
     finally:
         cur.close()
     return "Consultation deleted"
+
+def report():
+    response = ""
+    try:
+        cur = db.connection.cursor()
+        rs = cur.execute("SELECT DISTINCT(department) AS department,id,department_email FROM hods_email")
+        data = cur.fetchall()
+        count = 0
+        while(count < len(data)):
+            print("count "+str(count)+" data len "+str(len(data))+" name "+data[1][0])
+            obj = data[count]
+            rs0 = cur.execute("SELECT s.names,c.regdate FROM consultation c INNER JOIN students s ON s.id=c.student WHERE c.status='pending' and s.department='"+obj[0]+"'")
+            consulted = cur.fetchall()
+            counter = 0
+            print("counter "+str(counter))
+            consultedStudent = "<table border='1'><tr><th>Names</th><th>Consulted on</th><tr>"
+            while(counter<len(consulted)):
+                consult = consulted[counter]
+                print("consultation")
+                consultedStudent += "<tr><td>"+consult[0]+"</td><td>"+str(consult[2])+"</td></tr>"
+                counter = counter + 1
+
+            count = count + 1
+            consultedStudent += "</table>"
+            response = Helper.sendGmail(obj[2],"Consulted student for "+obj[0],consultedStudent)
+            cur.execute("UPDATE consultation c,students s SET c.status='reported' WHERE s.department='"+obj[0]+"'")
+            db.connection.commit()
+            
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+    return response

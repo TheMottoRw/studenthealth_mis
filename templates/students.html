@@ -21,6 +21,8 @@
                         <th>#Count</th>
                         <th>Names</th>
                         <th>Phone</th>
+                        <th>Reg.no</th>
+                        <th>Department</th>
                         <th>Ins. Type</th>
                         <th>Ins. number</th>
                         <th>Reg. Date</th>
@@ -32,6 +34,8 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ student.names }}</td>
                             <td>{{ student.phone }}</td>
+                            <td>{{ student.regno }}</td>
+                            <td>{{ student.department }}</td>
                             <td>{{ student.insurance_type }}</td>
                             <td>{{ student.insurance_number }}</td>
                             <td>{{ student.regdate }}</td>
@@ -54,6 +58,12 @@
                     <input type='text' name="regno" class='form-control'><br>
                     <label>Phone</label>
                     <input type='text' name="phone" class='form-control'><br>
+                    <label>Department</label>
+                    <select name="department" class='form-control'>
+                        <option>Information Technology</option>
+                        <option>Renewable Energy</option>
+                        <option>Electronics  Telecommunication Technology</option>
+                        </select><br>
                     <div class="row">
                         <div class="col-md-6">
                             <label>Insurance</label><br>

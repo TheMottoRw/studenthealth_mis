@@ -1,6 +1,10 @@
-from config import app,db
 from flask import jsonify,session,redirect,url_for
-import base64
+import base64,smtplib,random
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from config import app,db
+
+
 def login(request):
     feed = 'ok'
     password = str(base64.b64encode(request.values['password'].encode('utf-8')),'utf-8')
@@ -40,3 +44,37 @@ def checkSession(request):
     if('userid' not in session):
         return 0
     return 1
+
+
+def sendGmail(to,subject,message):
+    feed = 'ok'
+    # subject = subject # The subject line
+
+    msg = MIMEMultipart()
+    msg['Message-Id'] = str(random.random()*100000)
+    msg['From'] = 'hasua.mr@gmail.com'
+    msg['FromName'] = 'Manzi Roger'
+    msg['To'] = to
+    msg['Subject'] = subject
+    msg['Reply-To'] = "hasua.mr@gmail.com"
+    msg['Host'] = "smtp.gmail.com"
+    msg['SMTPAuth'] = 'true'
+    # Attach the message to the MIMEMultipart object
+    msg.attach(MIMEText(message, 'html'))
+    textMessage = msg.as_string()  # convert object in text
+    
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.connect("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    # Next, log in to the server
+    server.login("hasua.mr@gmail.com", "Roger2709")
+    # Send the mail
+    try:
+        response=server.sendmail(msg['From'], msg['To'], textMessage)
+        print(str(response))
+    except:
+        feed = 'fail'
+    server.quit()
+    return feed

@@ -25,6 +25,12 @@ $("#btnResetConsultationForm").click(function (e) {
 $("#btnResetMedicationForm").click(function (e) {
     $("#formMedication").attr('action', '/medications');
 });
+$("#btnResetHodEmailForm").click(function(e){
+    $("#formHodEmail").attr('action','depemail');
+    $("#department").show();
+    $("#department_box").hide();
+    $("#deparment_email").val("")
+})
 function autoLoad() {
     var urlArr = document.URL.split('/');
     urlArr.shift();

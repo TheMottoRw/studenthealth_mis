@@ -155,6 +155,16 @@ function setEditMedicationFormData(obj){
 
     $("#formMedication").attr('action','/medication/'+parseInt(obj.getAttribute('data-id')));
 }
+
+function setEditHodsEmailFormData(obj){
+    $("#department_email").val(obj.getAttribute('data-department-email'));
+    $("#department").val(obj.getAttribute('data-department'));
+
+    $("#department").hide();
+    $("#department_box").val(obj.getAttribute('data-department'));
+    $("#department_box").show();
+    $("#formHodsEmail").attr('action','/depemail/'+parseInt(obj.getAttribute('data-id')));
+}
 function searchPrescription(str){
     ajax("/consultation/"+str, {}, "GET", "json", function (obj) {
         var data = '';

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+<html>
+
+<head>
+    <title>
+        {% block title %} Student health MIS {{ data }} {% endblock %}
+    </title>
+</head>
+
+<body>
+    {% block menu %}
+    {% include 'menu_admin.html' %}
+    {% endblock %}
+    {% block content %}
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-9">
+                <h3>Registered department emails</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <th>#Count</th>
+                        <th>Department</th>
+                        <th>Email</th>
+                        <th>Reg. Date</th>
+                        <th>Manage</th>
+                    </thead>
+                    <tbody id="registeredStudents">
+                        {% for student in hodsemail %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ student.department }}</td>
+                            <td>{{ student.department_email }}</td>
+                            <td>{{ student.regdate }}</td>
+                            <td>
+                                <button onclick="setEditHodsEmailFormData(this)" data-id="{{ student.id }}" data-department="{{ student.department }}" data-department-email="{{ student.department_email }}" class="btn btn-warning">Edit</button>&nbsp;&nbsp;
+                                    <a href="/depemail/delete/{{ student.id }}" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <form action="/depemail" method="POST" id="formHodsEmail">
+                    <h3>Register email</h3>
+                    <span id="regHodResponse"></span>
+                    <input type="hidden" id="hodId">
+                    <label>Email</label>
+                    <input type='text' name="department_email" class='form-control' id="department_email"><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Department</label><br>
+                            <select name="department" id="department">
+                                <option>Information Technology</option>
+                                <option>Renewable Energy</option>
+                                <option>Electronics Telecommunication Technology</option>
+                            </select>
+                            <input type="text" id="department_box" name="department_box" class="form-control col-md-6" style="width:300px;display: none;" readonly>
+                        </div>
+                    </div>
+                    <input type='submit' name="register" id="btnRegStudents" value='Register' class='btn btn-success'>
+                    <input type='reset' name="reset" id="btnResetHodEmailForm" value='Reset'
+                        class='btn btn-default pull-right'><br>
+                </form>
+                <hr>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+<script>
+    // loadUsers('setContent');
+</script>
+
+</html>

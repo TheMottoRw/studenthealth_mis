@@ -1,5 +1,5 @@
 from flask import Flask,request,json,render_template,redirect,url_for,session,jsonify
-from controllers import Nurses,Students,Administrator,Medications,MedicationHistory,Consultation,Helper
+from controllers import Nurses,Students,Administrator,Medications,MedicationHistory,Consultation,Helper,HodsEmail
 from config import app
 
 @app.route('/',methods = ['GET','POST'])
@@ -18,6 +18,15 @@ def vStudents():
         return redirect('/')
     feed = Students.get(request)
     return render_template('students.html',students = feed)
+
+@app.route('/v/depemail',methods = ['GET'])
+def vHodemail():
+    if(Helper.checkSession(request) == 0):
+        return redirect('/')
+    feed = HodsEmail.get(request)
+    print(feed)
+    return render_template('department_emails.html',hodsemail = feed)
+    # return jsonify(feed)
 
 @app.route('/v/stdopenlink',methods = ['GET'])
 def vStudentsOpenRegistration():
@@ -86,6 +95,38 @@ def deleteAdmin(id):
     feed = Administrator.delete(id)
     return feed
 
+
+@app.route('/depemail',methods=['GET','POST'])
+def depemail():
+    feed = "email created"
+    if(request.method == 'POST'):
+    #    feed = Students.save('Manzi','0726183049','17rp01001','Yes','RSSB','1232423')
+       feed = HodsEmail.save(request.values['department'],request.values['department_email'])
+       returnRoute = render_template('department_emails.html',message = feed,hodsemail = HodsEmail.get(request))
+    else:
+        # feed = HodsEmail.get(request)
+        returnRoute = redirect('/v/depemail')
+        print(feed)
+    return returnRoute
+
+
+
+@app.route('/depemail/<int:id>', methods = ['GET','POST'])
+def updateDepemail(id):
+    if(request.method == 'POST'):
+        feed = HodsEmail.update(id,request.values['department_box'],request.values['department_email'])
+        returnRoute = redirect('/v/depemail')
+        return returnRoute
+    else:
+        feed = HodsEmail.getById(id)
+        returnRoute = redirect('/v/depemail')
+        return jsonify(feed)
+
+@app.route('/depemail/delete/<int:id>', methods = ['GET'])
+def deleteEmail(id):
+    feed = HodsEmail.delete(id)
+    return feed
+
 @app.route('/login',methods = ['GET','POST'])
 def login():
     if(request.method == 'GET'):
@@ -136,12 +177,15 @@ def deleteNurse(id):
     return feed
 
 #students route
+@app.route("/gmail")
+def sendEmail():
+    return Helper.sendGmail("mnzroger@gmail.com","For your information","Hello <b>Roger</b>,We are running and py email.")
 @app.route('/students',methods=['GET','POST'])
 def students():
     feed = "student created"
     if(request.method == 'POST'):
     #    feed = Students.save('Manzi','0726183049','17rp01001','Yes','RSSB','1232423')
-       feed = Students.save(request.values['names'],request.values['phone'],request.values['regno'],'Yes',request.values['insurance'],request.values['insurance_number'])
+       feed = Students.save(request.values['names'],request.values['phone'],request.values['department'],request.values['regno'],'Yes',request.values['insurance'],request.values['insurance_number'])
        returnRoute = render_template('students.html',message = feed,students = Students.get(request))
     else:
         returnRoute = redirect('/v/students')
@@ -176,6 +220,7 @@ def studentById(id):
 def deleteStudent(id):
     feed = Students.delete(id)
     return feed
+    # return redirect('/v/students')
 
 #Medication route
 @app.route('/medications',methods=['GET','POST'])
@@ -259,6 +304,11 @@ def consultationById(id):
 @app.route('/consultation/delete/<int:id>', methods = ['GET'])
 def deleteConsultation(id):
     feed = Consultation.delete(id)
+    return feed
+
+@app.route('/consultation/report', methods = ['GET'])
+def reportConsultation():
+    feed = Consultation.report()
     return feed
 
 if __name__ == '__main__':
