@@ -56,7 +56,7 @@ def update(ids,names,phone):
 def delete(request,ids):
     try:
         cur = db.connection.cursor()
-        rs = cur.execute("DELETE FROM administrators WHERE id=%s",(str(ids)))
+        rs = cur.execute("DELETE FROM administrators WHERE id='"+str(ids)+"'")
         db.connection.commit()
         print("result "+str(rs))
     except Exception as e:

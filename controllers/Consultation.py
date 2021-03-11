@@ -1,5 +1,5 @@
 from config import app,db
-from flask import jsonify
+from flask import jsonify,redirect
 from controllers import MedicationGiven,Medications,Helper
 def save(student,height,weight,symptoms,medications,medication_qty,conditions):
     cur = db.connection.cursor()
@@ -124,22 +124,22 @@ def report():
         while(count < len(data)):
             print("count "+str(count)+" data len "+str(len(data))+" name "+data[1][0])
             obj = data[count]
-            rs0 = cur.execute("SELECT s.names,c.regdate FROM consultation c INNER JOIN students s ON s.id=c.student WHERE c.status='pending' and s.department='"+obj[0]+"'")
+            rs0 = cur.execute("SELECT s.names,s.regno,c.regdate FROM consultation c INNER JOIN students s ON s.id=c.student WHERE c.status='pending' and s.department='"+obj[0]+"'")
             consulted = cur.fetchall()
             counter = 0
             print("counter "+str(counter))
-            consultedStudent = "<table border='1'><tr><th>Names</th><th>Consulted on</th><tr>"
+            consultedStudent = "<table border='1'><tr><th>Names</th><th>Registration number</th><th>Consulted on</th><tr>"
             while(counter<len(consulted)):
                 consult = consulted[counter]
                 print("consultation")
-                consultedStudent += "<tr><td>"+consult[0]+"</td><td>"+str(consult[2])+"</td></tr>"
+                consultedStudent += "<tr><td>"+consult[0]+"</td><td>"+consult[1]+"</td><td>"+str(consult[2])+"</td></tr>"
                 counter = counter + 1
 
             count = count + 1
             consultedStudent += "</table>"
             response = Helper.sendGmail(obj[2],"Consulted student for "+obj[0],consultedStudent)
-            cur.execute("UPDATE consultation c,students s SET c.status='reported' WHERE s.department='"+obj[0]+"'")
-            db.connection.commit()
+            # cur.execute("UPDATE consultation c,students s SET c.status='reported' WHERE s.department='"+obj[0]+"'")
+            # db.connection.commit()
             
     except Exception as e:
         print(e)

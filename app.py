@@ -309,7 +309,7 @@ def deleteConsultation(id):
 @app.route('/consultation/report', methods = ['GET'])
 def reportConsultation():
     feed = Consultation.report()
-    return feed
+    return redirect('/v/consultation')
 
 if __name__ == '__main__':
     app.run(debug=True)

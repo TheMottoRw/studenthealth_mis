@@ -1,5 +1,5 @@
 from config import app,db
-from flask import jsonify
+from flask import jsonify,redirect
 from controllers import MedicationHistory
 def save(names,description,stock,unit):
     cur = db.connection.cursor()
@@ -95,7 +95,7 @@ def update(ids,names,description,stock,unit):
 def delete(ids):
     try:
         cur = db.connection.cursor()
-        rs = cur.execute("DELETE FROM medications WHERE id=%s",(str(ids)))
+        rs = cur.execute("DELETE FROM medications WHERE id='"+str(ids)+"'")
         db.connection.commit()
         print("result "+str(rs))
     except Exception as e:

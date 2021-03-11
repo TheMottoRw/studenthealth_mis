@@ -1,5 +1,5 @@
 from config import app,db
-from flask import jsonify
+from flask import jsonify,redirect
 def save(department,email):
     cur = db.connection.cursor()
     cur.execute("INSERT INTO hods_email SET department=%s,department_email=%s",(department,email))
@@ -53,14 +53,14 @@ def update(ids,department,email):
         cur.close()
     return "User updated"
 
-def delete(request,ids):
+def delete(id):
     try:
         cur = db.connection.cursor()
-        rs = cur.execute("DELETE FROM hods_email WHERE id=%s",(str(ids)))
+        rs = cur.execute("DELETE FROM hods_email WHERE id='"+str(id)+"'")
         db.connection.commit()
         print("result "+str(rs))
     except Exception as e:
         print(e)
     finally:
         cur.close()
-    return "User updated"
+    return redirect('/v/depemail')

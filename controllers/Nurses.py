@@ -1,5 +1,5 @@
 from config import app,db
-from flask import jsonify
+from flask import jsonify,redirect
 import base64
 def save(names,phone,pwd):
     password = str(base64.b64encode(pwd.encode('utf-8')),'utf-8')
@@ -57,7 +57,7 @@ def update(ids,names,phone,pwd):
 def delete(ids):
     try:
         cur = db.connection.cursor()
-        rs = cur.execute("DELETE FROM nurses WHERE id=%s",(str(ids)))
+        rs = cur.execute("DELETE FROM nurses WHERE id='"+str(ids)+"'")
         db.connection.commit()
         print("result "+str(rs))
     except Exception as e:

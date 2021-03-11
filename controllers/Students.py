@@ -74,7 +74,7 @@ def update(ids,names,phone,regno,hasInsurance,insuranceType,insuranceNumber):
 def delete(ids):
     try:
         cur = db.connection.cursor()
-        rs = cur.execute("DELETE FROM students WHERE id=%s",(str(ids)))
+        rs = cur.execute("DELETE FROM students WHERE id='"+str(ids)+"'")
         db.connection.commit()
         print("result "+str(rs))
     except Exception as e:
