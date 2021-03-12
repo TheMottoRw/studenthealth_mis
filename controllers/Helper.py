@@ -4,9 +4,19 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from config import app,db
 
+def adminExistance():
+    cur = db.connection.cursor()
+    password = str(base64.b64encode("12345".encode('utf-8')),'utf-8')
+    rs = cur.execute("SELECT * FROM administrators")
+    data = cur.fetchall()
+    if(len(data)==0):
+        cur.execute("INSERT INTO administrators SET names=%s,phone=%s,password=%s",("Kabatesi Benitha","0726183049",password))
+        db.connection.commit()
+    cur.close()
 
 def login(request):
     feed = 'ok'
+    adminExistance()
     password = str(base64.b64encode(request.values['password'].encode('utf-8')),'utf-8')
     print(password)
     try:

@@ -197,7 +197,8 @@ def openLink():
     feed = "student created"
     if(request.method == 'POST'):
     #    feed = Students.save('Manzi','0726183049','17rp01001','Yes','RSSB','1232423')
-       feed = Students.save(request.values['names'],request.values['phone'],request.values['regno'],'Yes',request.values['insurance'],request.values['insurance_number'])
+       feed = Students.save(request.values['names'],request.values['phone'],request.values['department'],request.values['regno'],'Yes',request.values['insurance'],request.values['insurance_number'])
+    #    feed = Students.save(request.values['names'],request.values['phone'],request.values['regno'],'Yes',request.values['insurance'],request.values['insurance_number'])
        returnRoute = redirect('/v/stdopenlink')
        print(feed)
     return returnRoute
@@ -277,6 +278,12 @@ def consultation():
         print(feed)
     return returnRoute
 
+
+@app.route('/consultation/load',methods=['GET'])
+def consultationLoad():
+    feed = Consultation.get(request)
+    return feed
+
 @app.route('/prescribe', methods = ['GET','POST'])
 def prescribePatient():
     if(request.method == 'POST'):
@@ -309,7 +316,8 @@ def deleteConsultation(id):
 @app.route('/consultation/report', methods = ['GET'])
 def reportConsultation():
     feed = Consultation.report()
-    return redirect('/v/consultation')
+    return feed
+    # return redirect('/v/consultation')
 
 if __name__ == '__main__':
     app.run(debug=True)

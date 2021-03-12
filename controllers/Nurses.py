@@ -44,8 +44,9 @@ def getById(ids):
 
 def update(ids,names,phone,pwd):
     try:
+        password = str(base64.b64encode(pwd.encode('utf-8')),'utf-8')
         cur = db.connection.cursor()
-        rs = cur.execute("UPDATE nurses SET names=%s,phone=%s,password=%s WHERE id=%s",(names,phone,pwd,ids))
+        rs = cur.execute("UPDATE nurses SET names=%s,phone=%s,password=%s WHERE id=%s",(names,phone,password,ids))
         db.connection.commit()
         print("result "+str(rs))
     except Exception as e:

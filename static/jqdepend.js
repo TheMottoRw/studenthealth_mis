@@ -127,7 +127,7 @@ function loadMedicationCombo() {
 function registerPrescription(){
     ajax("/prescribe", { consultationId: $("#prescribeConsultationId").val(),medicationId: $("#selMedication").val(),quantity: $("#quantity").val(),condition: $("#condition").val(), }, "POST", "text", function (res) {
         if(res=='ok'){
-            $("#regPrescriptionResponse").html("Patient given medication recorded");
+            $("#regPrescriptionResponse").html("<div class='alert alert-success'></div>Patient given medication recorded</div>");
             $("#quantity").val('');
             $("#condition").val('');
         }

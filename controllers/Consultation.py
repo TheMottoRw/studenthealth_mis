@@ -27,7 +27,7 @@ def get(request):
                 prescriptionStr+= str(prescription[prescriptionCount][0])+'('+obj[7]+')\n'
                 prescriptionCount+=1
             
-            arr.append({'id':obj[0],'student':obj[1],'names':obj[9],'regno':obj[10],'height':obj[2],'weight':obj[3],'symptoms':obj[4],'medications':obj[5],'medications_quantity':obj[6],'conditions':obj[7],'regdate':obj[8],'prescription':prescriptionStr})
+            arr.append({'id':obj[0],'student':obj[1],'names':obj[10],'regno':obj[11],'height':obj[2],'weight':obj[3],'symptoms':obj[4],'medications':obj[5],'medications_quantity':obj[6],'conditions':obj[7],'regdate':obj[8],'prescription':prescriptionStr})
             count += 1
     except Exception as e:
         print(e)
@@ -100,7 +100,7 @@ def prescribe(consultationId,medicationId,quantity,condition):
         print(e)
     finally:
         cur.close()
-    return "Consultation updated"
+    return "ok"
 
 def delete(ids):
     try:
@@ -112,7 +112,7 @@ def delete(ids):
         print(e)
     finally:
         cur.close()
-    return "Consultation deleted"
+    return redirect("/v/consultation")
 
 def report():
     response = ""
@@ -120,24 +120,27 @@ def report():
         cur = db.connection.cursor()
         rs = cur.execute("SELECT DISTINCT(department) AS department,id,department_email FROM hods_email")
         data = cur.fetchall()
+        print(len(data))
         count = 0
         while(count < len(data)):
-            print("count "+str(count)+" data len "+str(len(data))+" name "+data[1][0])
             obj = data[count]
             rs0 = cur.execute("SELECT s.names,s.regno,c.regdate FROM consultation c INNER JOIN students s ON s.id=c.student WHERE c.status='pending' and s.department='"+obj[0]+"'")
             consulted = cur.fetchall()
             counter = 0
             print("counter "+str(counter))
-            consultedStudent = "<table border='1'><tr><th>Names</th><th>Registration number</th><th>Consulted on</th><tr>"
-            while(counter<len(consulted)):
-                consult = consulted[counter]
-                print("consultation")
-                consultedStudent += "<tr><td>"+consult[0]+"</td><td>"+consult[1]+"</td><td>"+str(consult[2])+"</td></tr>"
-                counter = counter + 1
+            
+            if(len(consulted)>0):
+                consultedStudent = "<table border='1'><tr><th>Names</th><th>Registration number</th><th>Consulted on</th><tr>"
+                while(counter<len(consulted)):
+                    consult = consulted[counter]
+                    print("consultation")
+                    consultedStudent += "<tr><td>"+consult[0]+"</td><td>"+consult[1]+"</td><td>"+str(consult[2])+"</td></tr>"
+                    counter = counter + 1
 
-            count = count + 1
-            consultedStudent += "</table>"
-            response = Helper.sendGmail(obj[2],"Consulted student for "+obj[0],consultedStudent)
+                count = count + 1
+                consultedStudent += "</table>"
+                response = Helper.sendGmail(obj[2],"Consulted student for "+obj[0],consultedStudent)
+                print("Response "+response)
             # cur.execute("UPDATE consultation c,students s SET c.status='reported' WHERE s.department='"+obj[0]+"'")
             # db.connection.commit()
             
